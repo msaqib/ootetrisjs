@@ -55,3 +55,10 @@ canvas {
     border-radius: 10px;
     padding-right: 4px;
 }
+
+#buttons button {
+    font-size: 20px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    width: 150px;
+}
