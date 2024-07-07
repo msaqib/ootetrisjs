@@ -1,21 +1,111 @@
 import Tetromino from './tetromino'
 
 export default class TetrominoFactory {
-    static createTetromino() {
-        const shapes = [
-            [[0, 0, 0],[1, 1, 1], [0, 0, 0]], // I shape
-            [[1, 1, 0], [1, 1, 0], [0, 0, 0]], // O shape
-            [[0, 1, 0], [1, 1, 1], [0, 0, 0]], // T shape
-            [[0, 0, 0], [0, 1, 1], [1, 1, 0]], // Z shape
-            [[0, 1, 1], [0, 1, 0], [0, 1, 0]], // J shape
+    
+    static shapes = [
+            [[0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]],
+            [[0, 0, 1, 0],
+            [0, 0, 1, 0],
+            [0, 0, 1, 0],
+            [0, 0, 1, 0]],
+            [[0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [0, 0, 0, 0]],
+            [[0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],],
+            [[1, 0, 0],
+            [1, 1, 1],
+            [0, 0, 0],
+            [0, 0, 0]],
+            [[0, 1, 1],
+            [0, 1, 0],
+            [0, 1, 0]],
+            [[0, 0, 0],
+            [1, 1, 1],
+            [0, 0, 1]],
+            [[0, 1, 0],
+            [0, 1, 0],
+            [1, 1, 0]],
+            [[0, 0, 1],
+            [1, 1, 1],
+            [0, 0, 0]],
+            [[0, 1, 0],
+            [0, 1, 0],
+            [0, 1, 1]],
+            [[0, 0, 0],
+            [1, 1, 1],
+            [1, 0, 0]],
+            [[1, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0]],
+            [[0, 1, 1, 0],
+            [0, 1, 1, 0],
+            [0, 0, 0, 0]],
+            [[0, 1, 1, 0],
+            [0, 1, 1, 0],
+            [0, 0, 0, 0]],
+            [[0, 1, 1, 0],
+            [0, 1, 1, 0],
+            [0, 0, 0, 0]],
+            [[0, 1, 1, 0],
+            [0, 1, 1, 0],
+            [0, 0, 0, 0]],
+            [[0, 1, 1],
+            [1, 1, 0],
+            [0, 0, 0]],
+            [[0, 1, 0],
+            [0, 1, 1],
+            [0, 0, 1]],
+            [[0, 0, 0],
+            [0, 1, 1],
+            [1, 1, 0]],
+            [[1, 0, 0],
+            [1, 1, 0],
+            [0, 1, 0]],
+            [[0, 1, 0],
+            [1, 1, 1],
+            [0, 0, 0]],
+            [[0, 1, 0],
+            [0, 1, 1],
+            [0, 1, 0]],
+            [[0, 0, 0],
+            [1, 1, 1],
+            [0, 1, 0]],
+            [[0, 1, 0],
+            [1, 1, 0],
+            [0, 1, 0]],
+            [[1, 1, 0],
+            [0, 1, 1],
+            [0, 0, 0]],
+            [[0, 0, 1],
+            [0, 1, 1],
+            [0, 1, 0]],
+            [[0, 0, 0],
+            [1, 1, 0],
+            [0, 1, 1]],
+            [[0, 1, 0],
+            [1, 1, 0],
+            [1, 0, 0]]
         ];
+        static colors = ["cyan", "yellow", "purple", "green", "red", "blue", "orange"];
 
-        const colors = ["cyan", "yellow", "purple", "green", "red", "blue", "orange"];
-        const index = Math.floor(Math.random() * shapes.length);
-        return new Tetromino(shapes[index], colors[index]);
+    static createTetromino() {
+        
+        const index = Math.floor(Math.random() * this.shapes.length);
+        return new Tetromino(this.shapes[index], this.colors[index % 4], index);
     }
 
-    static rotateTetromino() {
-
+    static rotateTetromino(index) {
+        const rotatedIndex = Math.floor(index / 4) * 4 + (index + 1) % 4
+        return {
+            index: rotatedIndex, 
+            shape: this.shapes[rotatedIndex]
+        }
     }
 }

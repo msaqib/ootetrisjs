@@ -4,21 +4,29 @@ import TetrominoFactory from './tetrominofactory';
 export default class Game {
     constructor(context) {
         this.board = new Board(10, 20);
+        this.context = context
+        this.start()
+    }
+
+    start() {
         this.currentTetromino = TetrominoFactory.createTetromino();
         this.nextTetromino = TetrominoFactory.createTetromino();
         this.score = 0;
         this.isGameOver = false;
-        this.context = context
-    }
-
-    start() {
-        // Initialize and start the game loop
+        this.scoreElement = document.getElementById('score')
     }
 
     rotateCurrentTetromino() {
-        const rotated = new Tetromino(this.currentTetromino.rotate(), this.currentTetromino.color)
-        if(this.board.isValidPosition(rotated, this.currentTetromino.position)) {
-            this.currentTetromino = rotated
+        const rotated = TetrominoFactory.rotateTetromino(this.currentTetromino.shapeindex)
+        const rotatedTetro = new Tetromino(rotated.shape, this.currentTetromino.color, rotated.index)
+        rotatedTetro.position.x = this.currentTetromino.position.x
+        rotatedTetro.position.y = this.currentTetromino.position.y
+        if (rotatedTetro.position.x + rotatedTetro.shape[0].length > 9) {
+            const diff = rotatedTetro.position.x + rotatedTetro.shape[0].length - 9
+            rotatedTetro.position.x = rotatedTetro.position.x - diff + 1
+        }
+        if(this.board.isValidPosition(rotatedTetro)) {
+            this.currentTetromino = rotatedTetro
         }
     }
 
@@ -36,18 +44,33 @@ export default class Game {
     }
 
     moveCurrentTetrominoRight() {
-        if (this.board.isValidPosition(this.currentTetromino, {x: this.currentTetromino.position.x + 1, y: this.currentTetromino.position.y})) {
-            this.currentTetromino.position.x += 1
+        this.currentTetromino.moveRight()
+        if (!this.board.isValidPosition(this.currentTetromino)) {
+            this.currentTetromino.moveLeft()
+        }
+    }
+
+    moveCurrentTetrominoLeft() {
+        this.currentTetromino.moveLeft()
+        if (!this.board.isValidPosition(this.currentTetromino)) {
+            this.currentTetromino.moveRight()
+        }
+    }
+
+    moveCurrentTetrominoDown() {
+        this.currentTetromino.moveDown()
+        if (!this.board.isValidPosition(this.currentTetromino)) {
+            this.currentTetromino.moveUp()
         }
     }
 
     update() {
         // Update game state
-        let endY = 2
+        let endY = this.currentTetromino.shape.length - 1
         let found = false
-        for (let i = 2 ; i >= 0 ; i--) {
+        for (let i = this.currentTetromino.shape.length - 1 ; i >= 0 ; i--) {
             endY = i
-            for (let j = 0 ; j < 3 ; j++) {
+            for (let j = 0 ; j < this.currentTetromino.shape[i].length ; j++) {
                 if (this.currentTetromino.shape[i][j] === 1) {
                     found = true
                 }
@@ -60,6 +83,9 @@ export default class Game {
         
         if ( (endY === 19) || ( this.hit(this.currentTetromino) )) {
             this.board.addTetromino(this.currentTetromino)
+            if (this.board.isCellInFirstRowFilled()) {
+                this.end()
+            }
             this.currentTetromino = this.nextTetromino
             this.nextTetromino = TetrominoFactory.createTetromino()
         }
@@ -77,9 +103,39 @@ export default class Game {
         
         // Render the current tetromino
         this.currentTetromino.render(this.context);
+        this.drawSilhouette()
     }
 
     end() {
         // Handle game over
+    }
+
+    calculateSilhouette() {
+        const clone = this.currentTetromino.clone()
+        while(this.board.isValidPosition(clone)) {
+            clone.moveDown()
+        }
+        clone.position.y -= 1
+        return clone
+    }
+
+    drawSilhouette() {
+        const silhouette = this.calculateSilhouette()
+        const cellWidth = this.context.canvas.width / this.board.width;
+        const cellHeight = this.context.canvas.height / this.board.height;
+
+        this.context.fillStyle = "rgba(0, 0, 0, 0.2)"; // Translucent black for the silhouette
+        silhouette.shape.forEach((row, dy) => {
+        row.forEach((value, dx) => {
+            if (value) {
+            this.context.fillRect(
+                (silhouette.position.x + dx) * cellWidth,
+                (silhouette.position.y + dy) * cellHeight,
+                cellWidth,
+                cellHeight
+            );
+            }
+        });
+        });
     }
 }

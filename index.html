@@ -4,12 +4,21 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Changa:wght@200..800&display=swap" rel="stylesheet">
+
         <title>Tetris Game</title>
       </head>
     <body>
         <h1>Tetris</h1>
         <div class="board">
+            <div class="panel">
+                <div>Socre: <span id="score">0</span></div>
+                <div>Level: <span id="level">1</span></div>
+            </div>
             <canvas id="game"></canvas>
+            <div class="panel"></div>
         </div>
     </body>
 </html>

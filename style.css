@@ -7,6 +7,12 @@
 body {
     background-color: #f0f0f0;
 }
+
+h1 {
+    text-align: center;
+    margin: 10px 0;
+}
+
 canvas {
     border: 1px solid #333;
     background-color: #fff;
@@ -16,5 +22,36 @@ canvas {
 
 .board {
     margin: 10px auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#game {
     width: 300px;
+}
+
+.panel {
+    flex: 1;
+    font-size: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#score, #level, #previews {
+    font-size: 32px;
+    display: inline-block;
+    width: 100px;
+}
+
+#score, #level {
+    font-family: 'Changa', Arial, sans-serif;
+    text-align: right;
+    background-color: #655d73;
+    color: #ddd;
+    border-radius: 10px;
+    padding-right: 4px;
 }
